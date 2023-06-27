@@ -58,6 +58,8 @@
  
  sudo cp trial_theft_identity.service /etc/systemd/system/
  
+ sudo apt-get update && apt-get install libpq5 -y
+ 
  sudo systemctl enable trial_theft_identity.service 
  
  sudo systemctl start trial_theft_identity.service 
