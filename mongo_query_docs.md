@@ -292,3 +292,265 @@ db.pizzas.insertMany( [
    { _id: 1, type: "cheese", size: "medium", price: 7 },
    { _id: 2, type: "vegan", size: "large", price: 8 }
 ] )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=============================this is localhost terminal cmds with commenting you can copy paste and use it =================================\
+// create and insert into collection
+db.test.insertOne({ name: "John", age: 30 })
+// find all documents in collection
+db.test.find()
+// insertMany to insert data into database
+db.test.insertMany([
+   { item: "journal", qty: 25, tags: ["blank", "red"], dim_cm: [ 14, 21 ] },
+   { item: "notebook", qty: 50, tags: ["red", "blank"], dim_cm: [ 14, 21 ] },
+   { item: "paper", qty: 100, tags: ["red", "blank", "plain"], dim_cm: [ 14, 21 ] },
+   { item: "planner", qty: 75, tags: ["blank", "red"], dim_cm: [ 22.85, 30 ] },
+   { item: "postcard", qty: 45, tags: ["blue"], dim_cm: [ 10, 15.25 ] }
+]);
+
+
+
+// find all documents in collection which matching tags key with blank with no order
+db.test.find( { tags: { $all: [ "blank"] }  } )
+
+//  find all documents in collection which matching tags key with blank with order
+db.test.find( { tags: "red" }  )
+
+// find all documents in collection which matching tags key greater than 25
+db.test.find( { dim_cm: { $gt: 25 } }  )
+
+// find all documents in collection which matching dim_cm key with red and blank with order
+db.test.find( { tags: ["red", "blank"] } )
+
+// find all documents in collection which matching dim_cm key with $elemMatch is greater than 22 and less than 30
+db.test.find( { dim_cm: { $elemMatch: { $gt: 22, $lt: 30 } } } )
+
+
+// to find the first list key in Array
+db.test.find( { "dim_cm.1": { $gt: 25 } } )
+
+// to fetch the length of an array of tag key
+db.test.find( { "tags": { $size: 3 } } )
+
+//
+
+db.test.insertMany( [
+   { item: "journal", instock: [ { warehouse: "A", qty: 5 }, { warehouse: "C", qty: 15 } ] },
+   { item: "notebook", instock: [ { warehouse: "C", qty: 5 } ] },
+   { item: "paper", instock: [ { warehouse: "A", qty: 60 }, { warehouse: "B", qty: 15 } ] },
+   { item: "planner", instock: [ { warehouse: "A", qty: 40 }, { warehouse: "B", qty: 5 } ] },
+   { item: "postcard", instock: [ { warehouse: "B", qty: 15 }, { warehouse: "C", qty: 35 } ] }
+]);
+
+
+//  find all documents in collection which matching instock key with warehouse A and qty 5
+db.test.find( { "instock": { warehouse: "A", qty: 5 } } )
+
+// find all documents in collection which matching instock key with  qty 5 and warehouse A
+db.test.find( { "instock": { qty: 5, warehouse: "A" } } )
+
+// find all documents in collection which matching instock key which qty is greater than 20
+db.test.find({"instock.qty":{$gt:20}})
+
+//  find all documents in collection which matching instock key and first element one list which qty is less than and equal to 20
+db.test.find( { 'instock.0.qty': { $lte: 20 } } )
+
+//  find all documents in collection which matching instock key  which matches with  qty: 5 and warehouse: "A"
+db.test.find( { "instock": { $elemMatch: { qty: 5, warehouse: "A" } } } )
+
+
+//  find all documents in collection which matching instock key  which matches with  qty: less than 20 and greater than 10
+db.inventory.find( { "instock": { $elemMatch: { qty: { $gt: 10, $lte: 20 } } } } )
+
+
+// find all documents in collection which matching instock key  which matches with  qty: less than 20 and greater than 10
+db.inventory.find( { "instock.qty": { $gt: 10,  $lte: 20 } } )
+
+//  find all documents in collection which matching instock key  which matches with  qty: 5 and warehouse: "A"
+db.inventory.find( { "instock.qty": 5, "instock.warehouse": "A" } )
+
+
+// insert many documents in collection
+db.test.insertMany( [
+  { item: "journal", status: "A", size: { h: 14, w: 21, uom: "cm" }, instock: [ { warehouse: "A", qty: 5 } ] },
+  { item: "notebook", status: "A",  size: { h: 8.5, w: 11, uom: "in" }, instock: [ { warehouse: "C", qty: 5 } ] },
+  { item: "paper", status: "D", size: { h: 8.5, w: 11, uom: "in" }, instock: [ { warehouse: "A", qty: 60 } ] },
+  { item: "planner", status: "D", size: { h: 22.85, w: 30, uom: "cm" }, instock: [ { warehouse: "A", qty: 40 } ] },
+  { item: "postcard", status: "A", size: { h: 10, w: 15.25, uom: "cm" }, instock: [ { warehouse: "B", qty: 15 }, { warehouse: "C", qty: 35 } ] }
+]);
+
+// find all documents in collection which matching size key with 'A'
+db.test.find( { status: "A" } )
+
+// find all documents in collection which matching status key with A  and ( item = 1 and status = 1)
+db.test.find( { status: "A" }, { item: 1, status: 1 } )
+
+// find all documents in collection which matching status key with A  and ( item = 1 and status = 1) with remove _id
+db.test.find( { status: "A" }, { item: 1, status: 1, _id: 0 } )
+
+
+//
+db.test.find( { status: "A" }, { status: 0, instock: 0, _id: 0  } )
+
+
+// to exclude the display key to the user
+db.test.find(
+   { status: "A" },
+   { item: 1, status: 1, "size.uom": 1 }
+)
+
+db.test.find(
+   { status: "A" },
+   { "size.uom": 0 }
+)
+
+//to get last index record of the key json
+db.test.find( { status: "A" }, { item: 1, status: 1, instock: { $slice: -1 } } )
+
+// insert records in collection
+db.test.insertMany([
+   { _id: 1, item: null },
+   { _id: 2 }
+])
+// find all documents in collection which matching item key with null
+db.test.find( { item: null } )
+
+// find all documents in collection which matching item key with null and bson type (is 10)
+db.test.find( { item : { $type: 10 } } )
+
+//  find all documents in collection which matching item key with null and bson type (is 10)
+db.test.find( { item : { $exists: false } } )
+
+
+db.test.find( { item : { $exists: true } } )
+
+db.test.find(  )
+
+db.students.insertMany( [
+   { _id: 1, test1: 95, test2: 92, test3: 90, modified: "01/05/2020" },
+   { _id: 2, test1: 98, test2: 100, test3: 102, modified: "01/05/2020" },
+   { _id: 3, test1: 95, test2: 110, modified: "01/04/2020" }
+] )
+
+db.students.find()
+
+db.students.updateOne( { _id: 3 }, [ { $set: { "test3": 98, modified: "$$NOW"} } ] )
+
+db.students.find().pretty()
+
+
+
+db.students2.insertMany( [
+   { "_id" : 1, quiz1: 8, test2: 100, quiz2: 9, modified: "01/05/2020" },
+   { "_id" : 2, quiz2: 5, test1: 80, test2: 89, modified:"01/05/2020" },
+] )
+
+db.students2.find()
+
+
+db.students2.updateMany( {},
+  [
+    { $replaceRoot: { newRoot:
+       { $mergeObjects: [ { quiz1: 10, quiz2: 10, test1: 10, test2: 10 }, "$$ROOT" ] }
+    } },
+    { $set: { modified: "$$NOW"}  }
+  ]
+)
+
+
+db.students3.insertMany( [
+   { "_id" : 1, "tests" : [ 95, 92, 90 ], "modified" : ISODate("2019-01-01T00:00:00Z") },
+   { "_id" : 2, "tests" : [ 94, 88, 90 ], "modified" : ISODate("2019-01-01T00:00:00Z") },
+   { "_id" : 3, "tests" : [ 70, 75, 82 ], "modified" : ISODate("2019-01-01T00:00:00Z") }
+] );
+
+
+db.students3.find()
+
+
+db.students3.updateMany(
+   { },
+   [
+     { $set: { average : { $trunc: [ { $avg: "$tests" }, 0 ] }, modified: "$$NOW" } },
+     { $set: { grade: { $switch: {
+                           branches: [
+                               { case: { $gte: [ "$average", 90 ] }, then: "A" },
+                               { case: { $gte: [ "$average", 80 ] }, then: "B" },
+                               { case: { $gte: [ "$average", 70 ] }, then: "C" },
+                               { case: { $gte: [ "$average", 60 ] }, then: "D" }
+                           ],
+                           default: "F"
+     } } } }
+   ]
+)
+
+
+db.students4.insertMany( [
+  { "_id" : 1, "quizzes" : [ 4, 6, 7 ] },
+  { "_id" : 2, "quizzes" : [ 5 ] },
+  { "_id" : 3, "quizzes" : [ 10, 10, 10 ] }
+] )
+
+
+db.students4.find()
+
+
+db.students4.updateOne( { _id: 2 },
+  [ { $set: { quizzes: { $concatArrays: [ "$quizzes", [ 8, 6 ]  ] } } } ]
+)
+
+
+db.temperatures.insertMany( [
+  { "_id" : 1, "date" : ISODate("2019-06-23"), "tempsC" : [ 4, 12, 17 ] },
+  { "_id" : 2, "date" : ISODate("2019-07-07"), "tempsC" : [ 14, 24, 11 ] },
+  { "_id" : 3, "date" : ISODate("2019-10-30"), "tempsC" : [ 18, 6, 8 ] }
+] )
+
+
+db.temperatures.find()
+
+
+db.temperatures.updateMany( { },
+  [
+    { $addFields: { "tempsF": {
+          $map: {
+             input: "$tempsC",
+             as: "celsius",
+             in: { $add: [ { $multiply: ["$$celsius", 9/5 ] }, 32 ] }
+          }
+    } } }
+  ]
+)
+
+
+db.inventory.insertMany( [
+   { item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, status: "A" },
+   { item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, status: "P" },
+   { item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, status: "D" },
+   { item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, status: "D" },
+   { item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, status: "A" },
+] );
+
+db.inventory.deleteMany({})
+db.inventory.find()
+
+db.inventory.deleteOne( { status: "D" } )
+
+db.pizzas.insertMany( [
+   { _id: 0, type: "pepperoni", size: "small", price: 4 },
+   { _id: 1, type: "cheese", size: "medium", price: 7 },
+   { _id: 2, type: "vegan", size: "large", price: 8 }
+] )
