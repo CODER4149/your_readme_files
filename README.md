@@ -126,3 +126,5 @@ origin  https://token@github.com/iam-rnd/tagid-dashbord-ui.git (push)
 
 git remote -v
 
+
+docker run -d  -p 8001:8001 redislabs/redisinsight:1.13.1
