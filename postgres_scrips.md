@@ -33,7 +33,7 @@ GRANT SELECT ON SEQUENCES TO readonly_tagid;
 CREATE USER admin WITH PASSWORD 'admin';
 
 -- 2. Allow user to connect to the database
-GRANT CONNECT ON DATABASE "tagsmart-su-prod" TO admin;
+GRANT CONNECT ON DATABASE "test" TO admin;
 
 -- 3. Allow usage of the schema (public)
 GRANT USAGE ON SCHEMA public TO admin;
