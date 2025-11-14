@@ -54,3 +54,37 @@ GRANT SELECT ON SEQUENCES TO admin;
 
 
 ```
+## dead tupple rows in mb
+```
+
+
+
+SELECT
+    schemaname,
+    relname AS table_name,
+    pg_total_relation_size(relid) / 1024 / 1024 AS size_mb,
+    n_live_tup AS live_rows,
+    n_dead_tup AS dead_rows,
+    ROUND((n_dead_tup::numeric / NULLIF(n_live_tup + n_dead_tup, 0)) * 100, 2) AS dead_pct,
+    last_autovacuum,
+    last_vacuum
+FROM pg_stat_all_tables
+ORDER BY size_mb DESC;
+
+
+```
+## full vacume 
+```
+-- 1. for table
+VACUUM FULL  table_name;
+
+-- 2.  entire db 
+
+VACUUM FULL;
+
+
+
+
+
+
+```
